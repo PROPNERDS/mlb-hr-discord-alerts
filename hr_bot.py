@@ -123,14 +123,20 @@ def check_game(game_pk, seen):
 
 def main():
     seen = load_seen()
-    games = get_today_games()send_discord(f"✅ HR Bot checked {len(games)} MLB games today.")
+    games = get_today_games()
+    send_discord(f"✅ HR Bot checked {len(games)} MLB games today.")
 
     if not games:
-    send_discord("⚠️ HR Bot check ran, but no live/final MLB games were found today.")
-    return
+        send_discord("⚠️ HR Bot check ran, but no live/final MLB games were found today.")
+        return
 
     for game_pk in games:
         check_game(game_pk, seen)
+
+    save_seen(seen)
+
+if __name__ == "__main__":
+    main()
 
     save_seen(seen)
 
