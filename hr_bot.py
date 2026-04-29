@@ -1,13 +1,14 @@
 import os
 import json
 import requests
-from datetime import datetime, timezone
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 WEBHOOK_URL = os.environ["DISCORD_WEBHOOK_URL"]
 STATE_FILE = "seen_hrs.json"
 
 def get_today_games():
-    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    today = datetime.now(ZoneInfo("America/Chicago")).strftime("%Y-%m-%d")
     url = f"https://statsapi.mlb.com/api/v1/schedule?sportId=1&date={today}"
     data = requests.get(url, timeout=20).json()
 
@@ -122,11 +123,11 @@ def check_game(game_pk, seen):
 
 def main():
     seen = load_seen()
-    games = get_today_games()
+    games = get_today_games()send_discord(f"✅ HR Bot checked {len(games)} MLB games today.")
 
     if not games:
-        print("No live or final MLB games found today.")
-        return
+    send_discord("⚠️ HR Bot check ran, but no live/final MLB games were found today.")
+    return
 
     for game_pk in games:
         check_game(game_pk, seen)
