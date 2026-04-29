@@ -82,11 +82,17 @@ def check_game(game_pk, seen):
 
         batter = play.get("matchup", {}).get("batter", {}).get("fullName", "Unknown Batter")
         pitcher = play.get("matchup", {}).get("pitcher", {}).get("fullName", "Unknown Pitcher")
-        batting_team = play.get("team", {}).get("name", "Unknown Team")
 
         about = play.get("about", {})
         inning = about.get("inning", "?")
         half = about.get("halfInning", "").title()
+
+        if half == "Top":
+            batting_team = away_team
+        elif half == "Bottom":
+            batting_team = home_team
+        else:
+            batting_team = "Unknown Team"
 
         description = result.get("description", "Home run!")
 
@@ -124,6 +130,7 @@ def check_game(game_pk, seen):
 def main():
     seen = load_seen()
     games = get_today_games()
+
     send_discord(f"✅ HR Bot checked {len(games)} MLB games today.")
 
     if not games:
@@ -132,11 +139,6 @@ def main():
 
     for game_pk in games:
         check_game(game_pk, seen)
-
-    save_seen(seen)
-
-if __name__ == "__main__":
-    main()
 
     save_seen(seen)
 
