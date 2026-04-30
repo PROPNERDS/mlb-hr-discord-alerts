@@ -5,7 +5,8 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 WEBHOOK_URL = os.environ["DISCORD_WEBHOOK_URL"]
-STATE_FILE = "seen_hrs.json"
+today = datetime.now(ZoneInfo("America/Chicago")).strftime("%Y-%m-%d")
+STATE_FILE = f"seen_hrs_{today}.json"
 
 def get_today_games():
     today = datetime.now(ZoneInfo("America/Chicago")).strftime("%Y-%m-%d")
