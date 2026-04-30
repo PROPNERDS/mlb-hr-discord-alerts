@@ -130,6 +130,7 @@ def check_game(game_pk, seen):
 def main():
     seen = load_seen()
     games = get_today_games()
+    send_discord(f"✅ HR Bot checked {len(games)} MLB games.")
 
     send_discord(f"✅ HR Bot checked {len(games)} MLB games today.")
 
